@@ -1,0 +1,57 @@
+@using BlazorApp.Client
+@page "/partrow"
+
+<div class="row">
+
+    <div class="col-sm-8">
+        <input class="form-control" type="text" @bind="ThisIngredient.Name" />
+    </div>
+    <div class="col-sm-2">
+
+        <div class="row">
+            <button class="col-sm-2 btn btn-primary" @onclick="fewerParts" type="button">-</button>
+            <p class="text-center col-sm-2">@ThisIngredient.Parts</p>
+            <button class=" col-sm-2 btn btn-primary" @onclick="moreParts" type="button">+</button>
+        </div>
+    </div>
+    <div class="col-sm-2">@OuncesOfIngredient</div>
+</div>
+
+@code{
+    [Parameter]
+    public Ingredient ThisIngredient { get; set; }
+
+    public double percentageOfWhole
+    {
+        get
+        {
+            return (double)ThisIngredient.Parts / (double)ThisIngredient.TotalParts;
+        }
+    }
+
+    public double OuncesOfIngredient
+    {
+        get
+        {
+            return Math.Round((float)ThisIngredient.FinalOunces * percentageOfWhole, 3);
+        }
+    }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> PartsChanged { get; set; }
+
+    private async Task fewerParts(MouseEventArgs e)
+    {
+        if (ThisIngredient.Parts > 0)
+        {
+            ThisIngredient.Parts--;
+            await PartsChanged.InvokeAsync(e);
+        }
+    }
+
+    private async Task moreParts(MouseEventArgs e)
+    {
+        ThisIngredient.Parts++;
+        await PartsChanged.InvokeAsync(e);
+    }
+}

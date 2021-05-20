@@ -1,0 +1,98 @@
+@page "/partsper"
+@using BlazorApp.Client
+
+<h1>Parts Per Ingredient.</h1>
+@* <h2>Total Parts: @ingredients.Sum(i => i.Parts)</h2> *@
+<div class="row">
+    <div class="col-sm-2">
+        <input class="form-control" type="number" @bind="TotalOunces" />
+    </div>
+    <div class="col-sm-4">
+        <h5>Total Ounces: </h5>
+    </div>
+</div>
+<div class="input-group mb-3">
+    <input @bind="newIngredientName" type="text" class="form-control" @onkeyup="keyUpd"
+        placeholder="enter new ingredient here..." aria-label="Recipient's username" aria-describedby="basic-addon2" />
+    <div class="input-group-append">
+        <button class="btn btn-primary" @onclick="addIngredient" type="button">+ Add</button>
+    </div>
+</div>
+
+<div>
+
+    <div class="row">
+        <div class="col-sm-8">
+            <h5>Ingredient</h5>
+        </div>
+        <div class="col-sm-2">
+            <h5>Parts</h5>
+        </div>
+        <div class="col-sm-2">
+            <h5>Oz</h5>
+        </div>
+    </div>
+    @foreach (var ingredient in ingredients)
+    {
+        <PartRow ThisIngredient="@ingredient" PartsChanged="partsHaveChanged" />
+    }
+</div>
+
+
+@code{
+    private IList<Ingredient> ingredients = new List<Ingredient>();
+    private string newIngredientName = "";
+
+    private double totalOz = 4;
+    public double TotalOunces
+    {
+        get
+        {
+            return totalOz;
+        }
+        set
+        {
+            totalOz = value;
+            updateAll();
+        }
+    }
+
+    private void addIngredient()
+    {
+        if (!string.IsNullOrWhiteSpace(newIngredientName))
+        {
+            ingredients.Add(new Ingredient { Name = newIngredientName });
+            newIngredientName = "";
+            MouseEventArgs e = new MouseEventArgs();
+            partsHaveChanged(e);
+        }
+    }
+
+    private void keyUpd(KeyboardEventArgs eventArgs)
+    {
+        if (eventArgs.Key == "Enter") // fire on enter
+        {
+            addIngredient();
+        }
+    }
+
+    private void updateAll()
+    {
+        MouseEventArgs e = new MouseEventArgs();
+        partsHaveChanged(e);
+    }
+
+    private void partsHaveChanged(MouseEventArgs e)
+    {
+        this.StateHasChanged();
+
+        int totalParts = ingredients.Sum(i => i.Parts);
+
+        foreach (var ing in ingredients)
+        {
+            ing.TotalParts = totalParts;
+            ing.FinalOunces = TotalOunces;
+        }
+    }
+
+}
