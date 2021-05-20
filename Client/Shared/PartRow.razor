@@ -1,21 +1,19 @@
 @using BlazorApp.Client
 @page "/partrow"
-
-<div class="row">
-
-    <div class="col-sm-8">
+<tr>
+    <td>
         <input class="form-control" type="text" @bind="ThisIngredient.Name" />
-    </div>
-    <div class="col-sm-2">
+    </td>
+    <td>
+        <button class="btn btn-xs btn-primary" @onclick="fewerParts" type="button">-</button>
+        <p class="text-center">@ThisIngredient.Parts</p>
+        <button class="btn btn-xs btn-primary" @onclick="moreParts" type="button">+</button>
+    </td>
+    <td>
+        @OuncesOfIngredient
+    </td>
+</tr>
 
-        <div class="row">
-            <button class="col-sm-2 btn btn-primary" @onclick="fewerParts" type="button">-</button>
-            <p class="text-center col-sm-2">@ThisIngredient.Parts</p>
-            <button class=" col-sm-2 btn btn-primary" @onclick="moreParts" type="button">+</button>
-        </div>
-    </div>
-    <div class="col-sm-2">@OuncesOfIngredient</div>
-</div>
 
 @code{
     [Parameter]

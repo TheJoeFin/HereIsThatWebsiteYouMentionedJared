@@ -1,7 +1,7 @@
 @page "/partsper"
 @using BlazorApp.Client
 
-<h1>Parts Per Ingredient.</h1>
+<h2>Parts Per Ingredient.</h2>
 @* <h2>Total Parts: @ingredients.Sum(i => i.Parts)</h2> *@
 <div class="row">
     <div class="col-sm-2">
@@ -21,21 +21,28 @@
 
 <div>
 
-    <div class="row">
-        <div class="col-sm-8">
-            <h5>Ingredient</h5>
-        </div>
-        <div class="col-sm-2">
-            <h5>Parts</h5>
-        </div>
-        <div class="col-sm-2">
-            <h5>Oz</h5>
-        </div>
-    </div>
-    @foreach (var ingredient in ingredients)
-    {
-        <PartRow ThisIngredient="@ingredient" PartsChanged="partsHaveChanged" />
-    }
+    <table class="table">
+        <thead>
+
+            <tr>
+                <th>
+                    Ingredient
+                </th>
+                <th>
+                    Parts
+                </th>
+                <th>
+                    Oz
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ingredient in ingredients)
+            {
+                <PartRow ThisIngredient="@ingredient" PartsChanged="partsHaveChanged" />
+            }
+        </tbody>
+    </table>
 </div>
 
 
