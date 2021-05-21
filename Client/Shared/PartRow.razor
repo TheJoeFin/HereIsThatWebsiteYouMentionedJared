@@ -5,12 +5,27 @@
         <input class="form-control" type="text" @bind="ThisIngredient.Name" />
     </td>
     <td>
-        <button class="btn btn-xs btn-primary" @onclick="fewerParts" type="button">-</button>
-        <p class="text-center">@ThisIngredient.Parts</p>
-        <button class="btn btn-xs btn-primary" @onclick="moreParts" type="button">+</button>
+        <table>
+            <tbody>
+                <tr>
+                    <th>
+                        <p class="text-center">@ThisIngredient.Parts</p>
+                    </th>
+                    <th>
+                        <div>
+                            <button class="btn btn-xs btn-primary" @onclick="moreParts" type="button">+</button>
+                            <button class="btn btn-xs btn-primary" @onclick="fewerParts" type="button">-</button>
+                        </div>
+                    </th>
+                </tr>
+            </tbody>
+        </table>
     </td>
     <td>
         @OuncesOfIngredient
+    </td>
+    <td>
+        <button class="btn btn-danger btn-xs" @onclick="deleteRow">X</button>
     </td>
 </tr>
 
@@ -37,6 +52,15 @@
 
     [Parameter]
     public EventCallback<MouseEventArgs> PartsChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<string> RowDeleted { get; set; }
+
+    private void deleteRow(MouseEventArgs e)
+    {
+
+        RowDeleted.InvokeAsync(ThisIngredient.ID.ToString());
+    }
 
     private async Task fewerParts(MouseEventArgs e)
     {

@@ -5,12 +5,22 @@
 @* <h2>Total Parts: @ingredients.Sum(i => i.Parts)</h2> *@
 <div class="row">
     <div class="col-sm-2">
-        <input class="form-control" type="number" @bind="TotalOunces" />
     </div>
     <div class="col-sm-4">
-        <h5>Total Ounces: </h5>
     </div>
 </div>
+<table>
+    <tbody>
+        <tr>
+            <td>
+                <input class="form-control" type="number" @bind="TotalOunces" />
+            </td>
+            <td>
+                <h5>Total Ounces </h5>
+            </td>
+        </tr>
+    </tbody>
+</table>
 <div class="input-group mb-3">
     <input @bind="newIngredientName" type="text" class="form-control" @onkeyup="keyUpd"
         placeholder="enter new ingredient here..." aria-label="Recipient's username" aria-describedby="basic-addon2" />
@@ -34,12 +44,13 @@
                 <th>
                     Oz
                 </th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var ingredient in ingredients)
             {
-                <PartRow ThisIngredient="@ingredient" PartsChanged="partsHaveChanged" />
+                <PartRow ThisIngredient="@ingredient" RowDeleted="deleteThisRow" PartsChanged="partsHaveChanged" />
             }
         </tbody>
     </table>
@@ -47,6 +58,40 @@
 
 
 @code{
+    protected override void OnInitialized()
+    {
+        SetUpInitialData();
+    }
+
+    private void SetUpInitialData()
+    {
+        Ingredient whiskey = new Ingredient()
+        {
+            Name = "Whiskey",
+            ID = 0,
+            Parts = 5
+        };
+        ingredients.Add(whiskey);
+
+        Ingredient lemon = new Ingredient()
+        {
+            Name = "Lemon",
+            ID = 1,
+            Parts = 2
+        };
+        ingredients.Add(lemon);
+
+        Ingredient simple = new Ingredient()
+        {
+            Name = "Simple Syrup",
+            ID = 2,
+            Parts = 1
+        };
+        ingredients.Add(simple);
+
+        updateAll();
+    }
+
     private IList<Ingredient> ingredients = new List<Ingredient>();
     private string newIngredientName = "";
 
@@ -68,7 +113,12 @@
     {
         if (!string.IsNullOrWhiteSpace(newIngredientName))
         {
-            ingredients.Add(new Ingredient { Name = newIngredientName });
+            int newID = 0;
+
+            if (ingredients.Count > 0)
+                newID = ingredients.Max(i => i.ID) + 1;
+
+            ingredients.Add(new Ingredient { Name = newIngredientName, ID = newID });
             newIngredientName = "";
             MouseEventArgs e = new MouseEventArgs();
             partsHaveChanged(e);
@@ -87,6 +137,17 @@
     {
         MouseEventArgs e = new MouseEventArgs();
         partsHaveChanged(e);
+    }
+
+    private void deleteThisRow(string ingID)
+    {
+        Ingredient deletedRow = ingredients.Where(i => i.ID.ToString() == ingID).FirstOrDefault();
+
+        if (deletedRow != null)
+        {
+            ingredients.Remove(deletedRow);
+            updateAll();
+        }
     }
 
     private void partsHaveChanged(MouseEventArgs e)

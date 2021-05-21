@@ -10,5 +10,7 @@ namespace BlazorApp.Client
         public int TotalParts { get; set; }
 
         public double FinalOunces { get; set; }
+
+        public int ID { get; set; }
     }
 }
