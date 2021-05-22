@@ -1,26 +1,24 @@
 @page "/partsper"
 @using BlazorApp.Client
 
-<h2>Parts Per Ingredient.</h2>
-@* <h2>Total Parts: @ingredients.Sum(i => i.Parts)</h2> *@
-<div class="row">
-    <div class="col-sm-2">
-    </div>
-    <div class="col-sm-4">
-    </div>
-</div>
 <table>
     <tbody>
         <tr>
             <td>
-                <input class="form-control" type="number" @bind="TotalOunces" />
+                <h2 style="vertical-align:middle;">Parts Per </h2>
             </td>
             <td>
-                <h5>Total Ounces </h5>
+                <input type="text" class="form-control" @bind="recipeName" />
             </td>
         </tr>
     </tbody>
 </table>
+
+<span style="display: block; margin: 6px 0px 24px 0px">
+    <input class="form-control" style="max-width: 48px; display: inline-flex;" type="number" @bind="TotalOunces" />
+    <p style="vertical-align:middle; display: inline;">Total Ounces </p>
+</span>
+
 <div class="input-group mb-3">
     <input @bind="newIngredientName" type="text" class="form-control" @onkeyup="keyUpd"
         placeholder="enter new ingredient here..." aria-label="Recipient's username" aria-describedby="basic-addon2" />
@@ -55,6 +53,9 @@
         </tbody>
     </table>
 </div>
+
+<button @onclick="ShowExportModal" class="btn btn-primary">Export</button>
+
 
 
 @code{
@@ -92,7 +93,21 @@
         updateAll();
     }
 
+    [CascadingParameter] public IModalService Modal { get; set; }
+
+    void ShowExportModal()
+    {
+        var parameters = new ModalParameters();
+
+        parameters.Add(nameof(ExportModal.Ingredients), ingredients);
+
+        Modal.Show<ExportModal>($"{totalOz} Oz of {recipeName}", parameters);
+    }
+
     private IList<Ingredient> ingredients = new List<Ingredient>();
+
+    private string recipeName = "Whiskey Sour";
+
     private string newIngredientName = "";
 
     private double totalOz = 4;

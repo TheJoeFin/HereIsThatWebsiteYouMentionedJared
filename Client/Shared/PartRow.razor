@@ -5,21 +5,13 @@
         <input class="form-control" type="text" @bind="ThisIngredient.Name" />
     </td>
     <td>
-        <table>
-            <tbody>
-                <tr>
-                    <th>
-                        <p class="text-center">@ThisIngredient.Parts</p>
-                    </th>
-                    <th>
-                        <div>
-                            <button class="btn btn-xs btn-primary" @onclick="moreParts" type="button">+</button>
-                            <button class="btn btn-xs btn-primary" @onclick="fewerParts" type="button">-</button>
-                        </div>
-                    </th>
-                </tr>
-            </tbody>
-        </table>
+        <span>
+            <p style="vertical-align:middle; width: 32; display: inline;" class="text-center">@ThisIngredient.Parts</p>
+            <button style="vertical-align:middle; display: inline;" class="btn btn-xs btn-primary" @onclick="moreParts"
+                type="button">+</button>
+            <button style="vertical-align:middle; display: inline;" class="btn btn-xs btn-primary" @onclick="fewerParts"
+                type="button">-</button>
+        </span>
     </td>
     <td>
         @OuncesOfIngredient

@@ -1,0 +1,30 @@
+@using BlazorApp.Client
+@page "/exportmodal"
+
+<table class="table">
+    <tbody>
+        @foreach (Ingredient ing in Ingredients)
+        {
+            <tr>
+                <td>@ing.Name</td>
+                <td>@ing.Parts Parts</td>
+                <td>@((double)ing.FinalOunces * ((double)ing.Parts / (double)ing.TotalParts)) Oz</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code{
+    [Parameter]
+    public IList<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
+
+    private string outputString = "";
+
+    protected override void OnInitialized()
+    {
+        foreach (Ingredient ing in Ingredients)
+        {
+            outputString += $"<p>{ing.Name} {ing.Parts} parts {ing.FinalOunces * (ing.Parts / ing.TotalParts)} Oz</p>";
+        }
+    }
+}
